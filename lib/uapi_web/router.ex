@@ -7,6 +7,7 @@ defmodule UapiWeb.Router do
 
   pipeline :auth do
     plug UapiWeb.Auth.Pipeline
+    plug Uapi.CurrentUser
   end
 
   scope "/api", UapiWeb do
@@ -17,8 +18,17 @@ defmodule UapiWeb.Router do
 
   scope "/api", UapiWeb do
     pipe_through [:api, :auth]
+    get "/my_user", UserController, :show
 
     resources "/daily_nutritions", DailyNutritionController, except: [:new, :edit]
+
+    resources "/stores", StoreController, except: [:new, :edit] do
+      resources "/foods", FoodController, except: [:new, :edit]
+    end
+
+    resources "/order", OrdesController, except: [:new, :edit] do
+      resources "/order_item", OrdeItensController, except: [:new, :edit]
+    end
   end
 
   # Enables LiveDashboard only for development
