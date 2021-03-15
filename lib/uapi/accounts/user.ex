@@ -5,6 +5,7 @@ defmodule Uapi.Accounts.User do
   schema "users" do
     field :email, :string
     field :encrypted_password, :string
+    field :token, :string
     field :password, :string, virtual: true
 
     timestamps()
@@ -13,7 +14,7 @@ defmodule Uapi.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :token])
     |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/)
     |> validate_length(:password, min: 6)

@@ -447,19 +447,31 @@ defmodule Uapi.Accounts do
   def create_ordes(attrs \\ %{}, %{user: user}) do
     quantity = Enum.reduce(attrs, 0, fn x, acc -> x["quantity"] + acc end)
 
-    IO.inspect(user.id)
-
     order =
       %Ordes{}
-      |> Ordes.changeset(%{price: quantity, user_id: user.id})
+      |> Ordes.changeset(%{price: quantity, user_id: user.id, status: "Finalizado"})
       |> Repo.insert()
-      |> IO.inspect()
 
     Enum.map(attrs, fn x ->
       create_orde_itens(%{order: order, food_id: x["id"], quantity: x["quantity"]})
     end)
 
+    send_order_finish(order, user)
     order
+  end
+
+  def send_order_finish({:ok, order}, user) do
+    Task.start(fn ->
+      Process.sleep(10000)
+
+      HTTPoison.post(
+        "https://exp.host/--/api/v2/push/send",
+        "{\"to\": \"#{user.token}\",
+        \"title\": \"Olá boas noticias!!\",
+        \"body\": \"Seu pedido está finalizado #{order.id} 🍔🍔🍔🍔\"}",
+        [{"Content-Type", "application/json"}]
+      )
+    end)
   end
 
   @doc """

@@ -4,6 +4,7 @@ defmodule Uapi.Accounts.Ordes do
 
   schema "order" do
     field :price, :integer
+    field :status, :string
     field :user_id, :id
 
     timestamps()
@@ -12,7 +13,7 @@ defmodule Uapi.Accounts.Ordes do
   @doc false
   def changeset(ordes, attrs) do
     ordes
-    |> cast(attrs, [:price, :user_id])
+    |> cast(attrs, [:price, :user_id, :status])
     |> validate_required([:price])
   end
 end

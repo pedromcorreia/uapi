@@ -47,7 +47,8 @@ defmodule Uapi.MixProject do
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
       {:cors_plug, "~> 2.0"},
-      {:faker, "~> 0.16"}
+      {:faker, "~> 0.16"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 

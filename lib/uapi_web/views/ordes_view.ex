@@ -11,7 +11,6 @@ defmodule UapiWeb.OrdesView do
   end
 
   def render("ordes.json", %{ordes: ordes}) do
-    %{id: ordes.id,
-      price: ordes.price}
+    %{id: ordes.id, price: ordes.price, status: ordes.status}
   end
 end
